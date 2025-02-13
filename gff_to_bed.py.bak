@@ -25,9 +25,9 @@ def limitBEDWrite(tinfo):
     @type tinfo: numpy object  
     """
 
-    for contig_id, feature in list(tinfo.items()):
+    for contig_id, feature in tinfo.items():
         uns_line = dict()
-        for tid, tloc in list(feature.items()):
+        for tid, tloc in feature.items():
             uns_line[(int(tloc[0])-1, int(tloc[1]))]=1
         for ele in sorted(uns_line):
             pline = [contig_id,
@@ -106,7 +106,7 @@ def __main__():
     try:
         query_file = sys.argv[1]
     except:
-        print(__doc__)
+        print __doc__
         sys.exit(-1)
 
     Transcriptdb = GFFParser.Parse(query_file)  

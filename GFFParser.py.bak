@@ -14,7 +14,7 @@ Copyright (C)
 import re
 import os
 import sys
-import urllib.request, urllib.parse, urllib.error
+import urllib
 import numpy as np
 import helper as utils 
 from collections import defaultdict
@@ -62,7 +62,7 @@ def attribute_tags(col9):
         # replace the double qoutes from feature identifier 
         val = re.sub('"', '', val)
         # replace the web formating place holders to plain text format 
-        info[key].extend([urllib.parse.unquote(v) for v in val.split(',') if v])
+        info[key].extend([urllib.unquote(v) for v in val.split(',') if v])
 
     return is_gff, info
                 
@@ -87,7 +87,7 @@ def spec_features_keywd(gff_parts):
             pass
     ## TODO key words
     for flat_name in ["Transcript", "CDS"]:
-        if flat_name in gff_parts["info"]:
+        if gff_parts["info"].has_key(flat_name):
             # parents
             if gff_parts['type'] in [flat_name] or re.search(r'transcript', gff_parts['type'], re.IGNORECASE):
                 if not gff_parts['id']:
@@ -158,7 +158,7 @@ def Parse(ga_file):
                 gff_info = spec_features_keywd(gff_info)
             
             # link the feature relationships
-            if 'Parent' in gff_info['info']: 
+            if gff_info['info'].has_key('Parent'): 
                 for p in gff_info['info']['Parent']:
                     if p == gff_info['id']:
                         gff_info['id'] = ''
@@ -217,7 +217,7 @@ def format_gene_models(parent_nf_map, child_nf_map):
     g_cnt = 0 
     gene = np.zeros((len(parent_nf_map),), dtype = utils.init_gene())
 
-    for pkey, pdet in list(parent_nf_map.items()):
+    for pkey, pdet in parent_nf_map.items():
         # considering only gene features 
         #if not re.search(r'gene', pdet.get('type', '')):
         #    continue 
@@ -284,7 +284,7 @@ def format_gene_models(parent_nf_map, child_nf_map):
             
             # make general ascending order of coordinates 
             if orient == '-':
-                for etype, excod in list(child_feat.items()):
+                for etype, excod in child_feat.items():
                     if len(excod) > 1:
                         if excod[0][0] > excod[-1][0]:
                             excod.reverse()
@@ -412,7 +412,7 @@ def format_gene_models(parent_nf_map, child_nf_map):
             break
     
     if XPFLG==1:
-        XQC = list(range(XP, len(gene)+1))
+        XQC = range(XP, len(gene)+1)
         gene = np.delete(gene, XQC)
 
     return gene 
@@ -445,7 +445,7 @@ def create_missing_feature_type(p_feat, c_feat):
     """
 
     child_n_map = defaultdict(list)
-    for fid, det in list(c_feat.items()):
+    for fid, det in c_feat.items():
         # get the details from grand child  
         GID = STRD = SCR = None
         SPOS, EPOS = [], [] 
