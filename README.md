@@ -27,9 +27,7 @@ test-data: Test data set. (move to your galaxy-root-folder/test-data/)
 
 ##### REQUIREMENTS
 
-    python2.6 or 2.7 and biopython  
-
-    Galaxy should be able to automatically install biopython via Galaxy toolshed.
+    Has been updated to function in python 3 ecosystems.
 
 ##### COMMENTS/QUESTIONS 
 
