@@ -67,7 +67,7 @@ def __main__():
     try:
         gtf_fname = sys.argv[1]
     except:
-        print(__doc__)
+        print __doc__
         sys.exit(-1)
 
     gtf_file_content = GFFParser.Parse(gtf_fname)  
